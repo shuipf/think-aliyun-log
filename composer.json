@@ -1,0 +1,37 @@
+{
+    "name": "shuipf/think-aliyun-log",
+    "description": "基于阿里云日志服务收集ThinkPHP 6框架运行中的日志信息",
+    "authors": [
+        {
+            "name": "水平凡",
+            "email": "admin@shuipf.com"
+        }
+    ],
+    "type": "library",
+    "license": "Apache-2.0",
+    "require": {
+        "topthink/framework": "^6.0",
+        "swlib/saber": "^1.0"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^4.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "aliyun\\log\\": "src"
+        }
+    },
+    "extra": {
+        "think": {
+            "services": [
+                "aliyun\\log\\Service"
+            ]
+        }
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer/"
+        }
+    }
+}
