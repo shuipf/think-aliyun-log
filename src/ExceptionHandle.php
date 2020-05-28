@@ -10,6 +10,7 @@
 namespace aliyun\log;
 
 use think\exception\Handle;
+use think\facade\Request;
 use Throwable;
 
 class ExceptionHandle extends Handle
@@ -28,7 +29,11 @@ class ExceptionHandle extends Handle
                 'message' => $this->getMessage($exception),
                 'code' => $this->getCode($exception),
             ];
+            $post = Request::post();
             $log = "[{$data['code']}]{$data['message']}[{$data['file']}:{$data['line']}]";
+            if (!empty($post)) {
+                $log .= PHP_EOL . print_r($post, true);
+            }
             if ($this->app->config->get('log.record_trace')) {
                 $log .= PHP_EOL . $exception->getTraceAsString();
             }

@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | WebTracking https://help.aliyun.com/document_detail/31752.html
 // +----------------------------------------------------------------------
-// | Copyright (c) 2019 http://www.shuipf.com, All rights reserved.
+// | Copyright (c) 2020 http://www.shuipf.com, All rights reserved.
 // +----------------------------------------------------------------------
 // | Author: 水平凡 <admin@abc3210.com>
 // +----------------------------------------------------------------------
@@ -11,10 +11,9 @@ declare (strict_types=1);
 
 namespace aliyun\log;
 
-use Swlib\SaberGM;
+use Swoole\Coroutine;
 use think\App;
 use think\contract\LogHandlerInterface;
-use Throwable;
 use think\facade\Env;
 use think\facade\Request;
 
@@ -31,7 +30,7 @@ class WebTracking implements LogHandlerInterface
         //内网域名
         'hostinside' => 'cn-hangzhou-intranet.log.aliyuncs.com',
         //${project}下面开通Web Tracking功能的某一个Logstore的名称
-        'logstore' => 'think6',
+        'logstore' => '',
     ];
 
     /**
@@ -108,17 +107,39 @@ class WebTracking implements LogHandlerInterface
         $url = "http://{$this->config['project']}.{$host}/logstores/{$this->config['logstore']}/track?APIVersion=0.6.0";
         foreach ($message as $msg) {
             $noticeUrl = $url . '&' . http_build_query($msg);
-            go(
-                function () use ($noticeUrl) {
-                    try {
-                        SaberGM::get($noticeUrl);
-                    } catch (Throwable $e) {
-
-                    }
-                }
-            );
+            $this->sendRequest($noticeUrl);
         }
         return true;
     }
 
+    /**
+     * 请求
+     * @param string $noticeUrl
+     */
+    protected function sendRequest(string $noticeUrl)
+    {
+        if (extension_loaded('swoole')) {
+            Coroutine::create(
+                function () use ($noticeUrl) {
+                    $this->sendGet($noticeUrl);
+                }
+            );
+        } else {
+            $this->sendGet($noticeUrl);
+        }
+    }
+
+    /**
+     * 发送请求
+     * @param string $noticeUrl 请求地址
+     */
+    protected function sendGet(string $noticeUrl)
+    {
+        try {
+            \Unirest\Request::get($noticeUrl);
+        } catch (\Unirest\Exception | \Throwable $e) {
+            //再尝试一次
+            \Unirest\Request::get($noticeUrl);
+        }
+    }
 }
