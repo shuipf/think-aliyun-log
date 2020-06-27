@@ -24,11 +24,12 @@ class WebTracking implements LogHandlerInterface
      * @var array
      */
     protected $config = [
-        'project' => 'run',
         //公网域名
         'host' => 'cn-hangzhou.log.aliyuncs.com',
         //内网域名
         'hostinside' => 'cn-hangzhou-intranet.log.aliyuncs.com',
+        //项目
+        'project' => '',
         //${project}下面开通Web Tracking功能的某一个Logstore的名称
         'logstore' => '',
     ];
