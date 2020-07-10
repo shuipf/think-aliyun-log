@@ -15,7 +15,6 @@
         "mashape/unirest-php": "^3.0"
     },
     "require-dev": {
-        "swoole/ide-helper": "^4.5",
         "symfony/var-dumper": "^4.3"
     },
     "autoload": {

@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | WebTracking https://help.aliyun.com/document_detail/31752.html
 // +----------------------------------------------------------------------
-// | Copyright (c) 2020 http://www.shuipf.com, All rights reserved.
+// | Copyright (c) 2019 http://www.shuipf.com, All rights reserved.
 // +----------------------------------------------------------------------
 // | Author: 水平凡 <admin@abc3210.com>
 // +----------------------------------------------------------------------
@@ -11,7 +11,6 @@ declare (strict_types=1);
 
 namespace aliyun\log;
 
-use Swoole\Coroutine;
 use think\App;
 use think\contract\LogHandlerInterface;
 use think\facade\Env;
@@ -119,15 +118,7 @@ class WebTracking implements LogHandlerInterface
      */
     protected function sendRequest(string $noticeUrl)
     {
-        if (extension_loaded('swoole')) {
-            Coroutine::create(
-                function () use ($noticeUrl) {
-                    $this->sendGet($noticeUrl);
-                }
-            );
-        } else {
-            $this->sendGet($noticeUrl);
-        }
+        $this->sendGet($noticeUrl);
     }
 
     /**
