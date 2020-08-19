@@ -124,14 +124,16 @@ class WebTracking implements LogHandlerInterface
     /**
      * 发送请求
      * @param string $noticeUrl 请求地址
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function sendGet(string $noticeUrl)
     {
+        $client = new \GuzzleHttp\Client();
         try {
-            \Unirest\Request::get($noticeUrl);
-        } catch (\Unirest\Exception | \Throwable $e) {
+            $client->request('GET', $noticeUrl);
+        } catch (\Throwable $e) {
             //再尝试一次
-            \Unirest\Request::get($noticeUrl);
+            $client->request('GET', $noticeUrl);
         }
     }
 }
