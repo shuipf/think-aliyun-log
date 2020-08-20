@@ -74,7 +74,7 @@ class WebTracking implements LogHandlerInterface
         foreach ($log as $type => $val) {
             foreach ($val as $msg) {
                 if (!is_string($msg)) {
-                    $msg = var_export($msg, true);
+                    $msg = print_r($msg, true);
                 }
                 $msg = [
                     //日志时间
