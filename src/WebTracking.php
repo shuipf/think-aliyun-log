@@ -48,9 +48,9 @@ class WebTracking implements LogHandlerInterface
 
     /**
      * 日志写入接口
-     * @access public
      * @param array $log 日志信息
      * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function save(array $log): bool
     {
@@ -100,6 +100,7 @@ class WebTracking implements LogHandlerInterface
      * 日志上报
      * @param array $message
      * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function logReport(array $message): bool
     {
@@ -115,6 +116,7 @@ class WebTracking implements LogHandlerInterface
     /**
      * 请求
      * @param string $noticeUrl
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     protected function sendRequest(string $noticeUrl)
     {
